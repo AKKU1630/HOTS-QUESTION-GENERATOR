@@ -1,4 +1,4 @@
-import fitz
+import pdfplumber
 from pptx import Presentation
 from docx import Document
 
@@ -13,20 +13,32 @@ def extract_text(file_path):
 
 def extract_pdf(path):
     text = ""
-    doc = fitz.open(path)
-    for page in doc:
-        text += page.get_text()
+    try:
+        with pdfplumber.open(path) as pdf:
+            for page in pdf.pages:
+                text += page.extract_text() + " "
+    except Exception as e:
+        print(f"Error extracting PDF: {e}")
     return text
 
 def extract_ppt(path):
     text = ""
-    prs = Presentation(path)
-    for slide in prs.slides:
-        for shape in slide.shapes:
-            if hasattr(shape, "text"):
-                text += shape.text + " "
+    try:
+        prs = Presentation(path)
+        for slide in prs.slides:
+            for shape in slide.shapes:
+                if hasattr(shape, "text"):
+                    text += shape.text + " "
+    except Exception as e:
+        print(f"Error extracting PPT: {e}")
     return text
 
 def extract_docx(path):
-    doc = Document(path)
-    return " ".join([p.text for p in doc.paragraphs])
+    text = ""
+    try:
+        doc = Document(path)
+        for para in doc.paragraphs:
+            text += para.text + " "
+    except Exception as e:
+        print(f"Error extracting DOCX: {e}")
+    return text
