@@ -15,85 +15,79 @@ st.set_page_config(
 # Custom CSS for styling
 st.markdown("""
     <style>
-    * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
-    }
-    
-    body {
-        background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%);
+    :root {
+        --primary: #00ffff;
+        --secondary: #b537f2;
+        --accent: #00ff41;
     }
     
     .stApp {
-        background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%);
+        background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%) !important;
+        background-attachment: fixed;
     }
     
-    [data-testid="stAppViewContainer"] {
-        background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%);
+    div.stApp {
+        background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%) !important;
     }
     
-    .main {
-        background-color: transparent;
+    div[data-testid="stAppViewContainer"] {
+        background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%) !important;
+        background-attachment: fixed;
     }
     
-    .stTabs [data-baseweb="tab-list"] button {
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #0066ff;
+    section[data-testid="stSidebar"] {
+        background-color: rgba(255, 255, 255, 0.95) !important;
     }
     
+    /* Header styling */
     .header-title {
-        text-align: center;
         color: #ffffff;
         font-size: 3rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 2px;
-        margin-bottom: 10px;
         text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+        text-align: center;
     }
     
     .header-subtitle {
-        text-align: center;
         color: #ffffff;
         font-size: 1.1rem;
-        margin-bottom: 30px;
         text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        text-align: center;
     }
     
+    /* Topic title */
     .topic-title {
-        color: #0066ff;
+        color: #0066ff !important;
         font-size: 1.8rem;
         font-weight: 800;
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-top: 20px;
-        margin-bottom: 20px;
         border-bottom: 3px solid #00ffff;
         padding-bottom: 10px;
     }
     
+    /* Marker section */
     .marker-section {
+        background: linear-gradient(135deg, #f0ffff 0%, #f5f0ff 100%) !important;
         border-left: 4px solid #00ff41;
-        padding-left: 15px;
-        margin: 20px 0;
-        background: linear-gradient(135deg, #f0ffff 0%, #f5f0ff 100%);
         padding: 20px;
         border-radius: 12px;
+        margin: 20px 0;
     }
     
     .marker-title {
-        color: #0066ff;
+        color: #0066ff !important;
         font-size: 1.3rem;
         font-weight: 700;
         text-transform: uppercase;
         letter-spacing: 1px;
-        margin-bottom: 15px;
     }
     
+    /* Question and Answer boxes */
     .question-box {
-        background: linear-gradient(135deg, rgba(0, 255, 255, 0.12) 0%, rgba(181, 55, 242, 0.12) 100%);
+        background: linear-gradient(135deg, rgba(0, 255, 255, 0.15) 0%, rgba(181, 55, 242, 0.15) 100%) !important;
         border-left: 3px solid #00ffff;
         padding: 15px;
         margin: 10px 0;
@@ -102,7 +96,7 @@ st.markdown("""
     }
     
     .answer-box {
-        background: linear-gradient(135deg, rgba(0, 102, 255, 0.08) 0%, rgba(181, 55, 242, 0.08) 100%);
+        background: linear-gradient(135deg, rgba(0, 102, 255, 0.1) 0%, rgba(181, 55, 242, 0.1) 100%) !important;
         border-left: 3px solid #b537f2;
         padding: 15px;
         margin-top: 10px;
@@ -111,87 +105,72 @@ st.markdown("""
         font-weight: 500;
     }
     
-    .stExpander {
-        background-color: white !important;
-        border: 2px solid #00ffff !important;
-        border-radius: 10px !important;
-        margin-bottom: 10px;
-    }
-    
-    .stExpander [data-testid="stExpanderDetails"] {
-        background-color: white !important;
-        padding: 20px;
-    }
-    
+    /* Buttons */
     .stButton > button {
         background: linear-gradient(135deg, #00ffff 0%, #b537f2 100%) !important;
         color: #000000 !important;
         border: none !important;
         border-radius: 10px !important;
         font-weight: 600 !important;
-        padding: 10px 20px !important;
-        box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
-        transition: all 0.3s ease;
+        text-transform: none;
     }
     
     .stButton > button:hover {
         box-shadow: 0 6px 20px rgba(181, 55, 242, 0.4) !important;
-        transform: translateY(-2px);
     }
     
+    /* Expanders */
+    .streamlit-expanderHeader {
+        background-color: linear-gradient(135deg, rgba(0, 255, 255, 0.1) 0%, rgba(181, 55, 242, 0.1) 100%) !important;
+        border: 2px solid #00ffff !important;
+        border-radius: 10px !important;
+        color: #0a0e27 !important;
+    }
+    
+    /* File uploader */
     .stFileUploader {
         background-color: white !important;
         border-radius: 15px !important;
-        padding: 20px !important;
     }
     
-    .stFileUploader label {
-        color: #0066ff !important;
-        font-weight: 700 !important;
-    }
-    
+    /* Messages */
     .stInfo {
         background-color: rgba(0, 255, 255, 0.1) !important;
-        border-left: 4px solid #00ffff !important;
         color: #0a0e27 !important;
     }
     
     .stSuccess {
         background-color: rgba(0, 255, 65, 0.1) !important;
-        border-left: 4px solid #00ff41 !important;
         color: #0a0e27 !important;
     }
     
     .stWarning {
         background-color: rgba(255, 193, 7, 0.1) !important;
-        border-left: 4px solid #ffc107 !important;
         color: #0a0e27 !important;
     }
     
     .stError {
         background-color: rgba(255, 0, 0, 0.1) !important;
-        border-left: 4px solid #ff0000 !important;
         color: #0a0e27 !important;
     }
     
-    .stMarkdown {
-        color: #0a0e27;
+    /* Text colors */
+    p, span, div {
+        color: #0a0e27 !important;
     }
     
     h1, h2, h3, h4, h5, h6 {
         color: #0066ff !important;
     }
     
-    .sidebar .sidebar-content {
-        background-color: rgba(255, 255, 255, 0.95);
-    }
-    
-    [data-testid="stSidebar"] {
-        background-color: rgba(255, 255, 255, 0.95);
-    }
-    
+    /* Divider */
     .stDivider {
         border-top: 2px solid #00ffff !important;
+    }
+    
+    /* Spinners and loaders */
+    .stSpinner {
+        color: #00ffff !important;
     }
     </style>
 """, unsafe_allow_html=True)
