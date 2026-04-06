@@ -1,4 +1,4 @@
-import pdfplumber
+from PyPDF2 import PdfReader
 from pptx import Presentation
 from docx import Document
 
@@ -9,13 +9,16 @@ def extract_text(file_path):
         return extract_ppt(file_path)
     elif file_path.endswith('.docx'):
         return extract_docx(file_path)
+    elif file_path.endswith('.txt'):
+        return extract_txt(file_path)
     return ""
 
 def extract_pdf(path):
     text = ""
     try:
-        with pdfplumber.open(path) as pdf:
-            for page in pdf.pages:
+        with open(path, 'rb') as file:
+            pdf_reader = PdfReader(file)
+            for page in pdf_reader.pages:
                 text += page.extract_text() + " "
     except Exception as e:
         print(f"Error extracting PDF: {e}")
@@ -41,4 +44,13 @@ def extract_docx(path):
             text += para.text + " "
     except Exception as e:
         print(f"Error extracting DOCX: {e}")
+    return text
+
+def extract_txt(path):
+    text = ""
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            text = file.read()
+    except Exception as e:
+        print(f"Error extracting TXT: {e}")
     return text
