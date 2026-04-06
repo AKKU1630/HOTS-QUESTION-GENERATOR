@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HOTS Question Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #00ffff;
+            --secondary: #b537f2;
+            --accent: #00ff41;
+            --light-bg: #f8fafc;
+            --dark-bg: #1e293b;
+            --gradient-start: #1dd1a1;
+            --gradient-end: #fd79a8;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #1dd1a1 0%, #a29bfe 40%, #fd79a8 100%);
+            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding-bottom: 50px;
+        }
+
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px 0;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            padding: 40px 20px 60px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.98;
+            margin-bottom: 0;
+            color: #ffffff;
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-header {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .upload-section {
+            background: white;
+            border-radius: 15px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 40px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .upload-section h2 {
+            color: #0066ff;
+            margin-bottom: 30px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: -9999px;
+        }
+
+        .file-input-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            border: 2px dashed #0066ff;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.08) 0%, rgba(181, 55, 242, 0.08) 100%);
+            margin-bottom: 20px;
+        }
+
+        .file-input-label:hover {
+            border-color: #00ff41;
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.15) 0%, rgba(181, 55, 242, 0.15) 100%);
+            transform: translateY(-2px);
+        }
+
+        .file-input-label i {
+            font-size: 2rem;
+            color: #0066ff;
+            margin-right: 15px;
+        }
+
+        .file-input-label .text {
+            text-align: left;
+        }
+
+        .file-input-label .text .main {
+            font-weight: 600;
+            color: #0066ff;
+            font-size: 1.1rem;
+        }
+
+        .file-input-label .text .sub {
+            color: #333333;
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #00ffff 0%, #b537f2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(181, 55, 242, 0.5);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .results-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .topic-section {
+            background: white;
+            border-radius: 15px;
+            padding: 35px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-top: 5px solid #0066ff;
+        }
+
+        .topic-title {
+            color: #0066ff;
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .topic-title i {
+            margin-right: 15px;
+            font-size: 2.5rem;
+            color: #00ffff;
+        }
+
+        .marker-section {
+            margin-bottom: 35px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f0ffff 0%, #f5f0ff 100%);
+            border-radius: 12px;
+            border-left: 4px solid #00ff41;
+        }
+
+        .marker-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #0066ff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .marker-badge {
+            background: linear-gradient(135deg, #00ffff 0%, #b537f2 100%);
+            color: #000000;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-right: 12px;
+            font-weight: 600;
+        }
+
+        .question-item {
+            background: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .question-item:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+            transform: translateY(-2px);
+        }
+
+        .question-header {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.12) 0%, rgba(181, 55, 242, 0.12) 100%);
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .question-header:hover {
+            background: linear-gradient(135deg, rgba(0, 255, 255, 0.18) 0%, rgba(181, 55, 242, 0.18) 100%);
+        }
+
+        .question-text {
+            flex: 1;
+            color: #0a0e27;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-right: 20px;
+        }
+
+        .toggle-icon {
+            font-size: 1.3rem;
+            color: #b537f2;
+            transition: transform 0.3s ease;
+            width: 30px;
+            text-align: center;
+        }
+
+        .question-item.active .toggle-icon {
+            transform: rotate(180deg);
+            color: #00ff41;
+        }
+
+        .answer-content {
+            display: none;
+            padding: 25px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            animation: slideDown 0.3s ease;
+        }
+
+        .answer-content.active {
+            display: block;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer-label {
+            background: linear-gradient(135deg, #00ffff 0%, #b537f2 100%);
+            color: #000000;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .answer-text {
+            color: #0a0e27;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: white;
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+
+        .no-results h2 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+
+        .no-results p {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        .filename-display {
+            background: linear-gradient(135deg, rgba(0, 102, 255, 0.12) 0%, rgba(181, 55, 242, 0.12) 100%);
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+            color: #0066ff;
+            font-size: 0.9rem;
+            display: none;
+            align-items: center;
+        }
+
+        .filename-display i {
+            margin-right: 8px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.2rem;
+            }
+
+            .upload-section {
+                padding: 25px;
+            }
+
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .question-text {
+                margin-right: 0;
+                margin-bottom: 15px;
+                width: 100%;
+            }
+
+            .toggle-icon {
+                align-self: flex-end;
+            }
+
+            .topic-section {
+                padding: 20px;
+            }
+
+            .topic-title {
+                font-size: 1.5rem;
+            }
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+            color: #00ffff;
+        }
+
+        .spinner {
+            border: 3px solid rgba(0, 255, 255, 0.3);
+            border-top: 3px solid #00ffff;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .reset-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #00ffff 0%, #b537f2 100%);
+            color: #000000;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(181, 55, 242, 0.4);
+        }
+
+        .reset-btn:active {
+            transform: translateY(0);
+        }
+
+        .reset-btn i {
+            font-size: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .reset-btn {
+                padding: 8px 14px;
+                font-size: 0.8rem;
+                top: 15px;
+                right: 15px;
+            }
+
+            .reset-btn i {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="reset-btn" onclick="resetPage()" title="Reset the entire page">
+        <i class="fas fa-redo-alt"></i>
+        Reset
+    </button>
+
+    <div class="header">
+        <div class="icon-header">
+            <i class="fas fa-brain"></i>
+        </div>
+        <h1>HOTS Question Generator</h1>
+        <p>Generate Higher Order Thinking Skills Questions from Your Learning Materials</p>
+    </div>
+
+    <div class="upload-section">
+        <h2><i class="fas fa-upload"></i> Upload Your Document</h2>
+        <form method="POST" enctype="multipart/form-data" id="uploadForm">
+            <div class="file-input-wrapper">
+                <input type="file" id="fileInput" name="file" accept=".pdf,.txt,.docx" required>
+                <label for="fileInput" class="file-input-label">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <div class="text">
+                        <div class="main">Click to upload or drag and drop</div>
+                        <div class="sub">PDF, TXT, or DOCX files supported</div>
+                    </div>
+                </label>
+                <div class="filename-display" id="filenameDisplay">
+                    <i class="fas fa-check-circle"></i>
+                    <span id="filename"></span>
+                </div>
+            </div>
+            <button type="submit" class="submit-btn">
+                <i class="fas fa-magic"></i> Generate Questions
+            </button>
+        </form>
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>Generating questions... Please wait</p>
+        </div>
+    </div>
+
+    <div class="results-container">
+        {% if results %}
+            {% for topic, questions_data in results.items() %}
+                <div class="topic-section">
+                    <div class="topic-title">
+                        <i class="fas fa-lightbulb"></i>
+                        {{ topic }}
+                    </div>
+
+                    <!-- 2 Markers Section -->
+                    {% if questions_data.get('2_markers') %}
+                    <div class="marker-section">
+                        <div class="marker-title">
+                            <span class="marker-badge"><i class="fas fa-bookmark"></i> 2 Marks</span>
+                            Understanding & Comprehension
+                        </div>
+                        {% for item in questions_data['2_markers'] %}
+                        <div class="question-item">
+                            <div class="question-header" onclick="toggleAnswer(this)">
+                                <div class="question-text">{{ item.question }}</div>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="answer-content">
+                                <span class="answer-label"><i class="fas fa-lightbulb"></i> Answer</span>
+                                <div class="answer-text">{{ item.answer }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- 5 Markers Section -->
+                    {% if questions_data.get('5_markers') %}
+                    <div class="marker-section">
+                        <div class="marker-title">
+                            <span class="marker-badge"><i class="fas fa-bookmark"></i> 5 Marks</span>
+                            Analysis & Evaluation
+                        </div>
+                        {% for item in questions_data['5_markers'] %}
+                        <div class="question-item">
+                            <div class="question-header" onclick="toggleAnswer(this)">
+                                <div class="question-text">{{ item.question }}</div>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="answer-content">
+                                <span class="answer-label"><i class="fas fa-lightbulb"></i> Answer</span>
+                                <div class="answer-text">{{ item.answer }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+
+                    <!-- 10 Markers Section -->
+                    {% if questions_data.get('10_markers') %}
+                    <div class="marker-section">
+                        <div class="marker-title">
+                            <span class="marker-badge"><i class="fas fa-bookmark"></i> 10 Marks</span>
+                            Synthesis & Creation
+                        </div>
+                        {% for item in questions_data['10_markers'] %}
+                        <div class="question-item">
+                            <div class="question-header" onclick="toggleAnswer(this)">
+                                <div class="question-text">{{ item.question }}</div>
+                                <i class="fas fa-chevron-down toggle-icon"></i>
+                            </div>
+                            <div class="answer-content">
+                                <span class="answer-label"><i class="fas fa-lightbulb"></i> Answer</span>
+                                <div class="answer-text">{{ item.answer }}</div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+
+    <script>
+        function toggleAnswer(header) {
+            const questionItem = header.closest('.question-item');
+            const answerContent = questionItem.querySelector('.answer-content');
+            
+            // Close other open answers in the same section
+            const section = header.closest('.marker-section');
+            const otherItems = section.querySelectorAll('.question-item.active');
+            otherItems.forEach(item => {
+                if (item !== questionItem) {
+                    item.classList.remove('active');
+                    item.querySelector('.answer-content').classList.remove('active');
+                }
+            });
+            
+            // Toggle current item
+            questionItem.classList.toggle('active');
+            answerContent.classList.toggle('active');
+        }
+
+        // File input handling
+        const fileInput = document.getElementById('fileInput');
+        const filenameDisplay = document.getElementById('filenameDisplay');
+        const filename = document.getElementById('filename');
+
+        fileInput.addEventListener('change', function() {
+            if (this.files.length > 0) {
+                filename.textContent = this.files[0].name;
+                filenameDisplay.style.display = 'flex';
+            }
+        });
+
+        // Drag and drop
+        const fileInputLabel = document.querySelector('.file-input-label');
+        
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+            fileInputLabel.addEventListener(eventName, preventDefaults, false);
+        });
+
+        function preventDefaults(e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+
+        ['dragenter', 'dragover'].forEach(eventName => {
+            fileInputLabel.addEventListener(eventName, highlight, false);
+        });
+
+        ['dragleave', 'drop'].forEach(eventName => {
+            fileInputLabel.addEventListener(eventName, unhighlight, false);
+        });
+
+        function highlight(e) {
+            fileInputLabel.style.borderColor = '#00ff41';
+            fileInputLabel.style.background = 'linear-gradient(135deg, rgba(0, 255, 255, 0.18) 0%, rgba(181, 55, 242, 0.18) 100%)';
+        }
+
+        function unhighlight(e) {
+            fileInputLabel.style.borderColor = '#00ffff';
+            fileInputLabel.style.background = 'linear-gradient(135deg, rgba(0, 255, 255, 0.08) 0%, rgba(181, 55, 242, 0.08) 100%)';
+        }
+
+        fileInputLabel.addEventListener('drop', handleDrop, false);
+
+        function handleDrop(e) {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            fileInput.files = files;
+            const event = new Event('change', { bubbles: true });
+            fileInput.dispatchEvent(event);
+        }
+
+        // Show loading indicator
+        document.getElementById('uploadForm').addEventListener('submit', function() {
+            document.getElementById('loading').style.display = 'block';
+        });
+
+        // Reset page function
+        function resetPage() {
+            // Clear the file input
+            document.getElementById('fileInput').value = '';
+            
+            // Hide filename display
+            document.getElementById('filenameDisplay').style.display = 'none';
+            document.getElementById('filename').textContent = '';
+            
+            // Clear all results
+            document.querySelectorAll('.topic-section').forEach(section => {
+                section.remove();
+            });
+            
+            // Reset form
+            document.getElementById('uploadForm').reset();
+            
+            // Hide loading indicator
+            document.getElementById('loading').style.display = 'none';
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+    </script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
