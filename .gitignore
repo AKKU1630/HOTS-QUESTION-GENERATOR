@@ -131,6 +131,3 @@ uploads/
 *.pptx
 *.pdf
 *.docx
-
-# Streamlit
-.streamlit/
